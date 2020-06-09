@@ -1,0 +1,21 @@
+server:
+  port: 8080
+spring:
+  servlet:
+    multipart:
+      location: F:/test
+      max-file-size: 20MB
+      max-request-size: 20MB
+  messages:
+    encoding: utf-8
+    basename: international
+    cache-duration: 3600
+  datasource:
+    url: jdbc:mysql://192.168.1.109:3307/test?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+    username: root
+    password: root
+    tomcat:
+      max-idle: 10
+      max-active: 50
+      max-wait: 10000
+      initial-size: 5
