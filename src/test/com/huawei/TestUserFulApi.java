@@ -313,4 +313,44 @@ public class TestUserFulApi
         Map<String, Object> stringObjectMap = Files.readAttributes(path, "*");
         System.out.println(JSON.toJSON(stringObjectMap));
     }
+    /**
+     * 在执⾏行行try、catch中的return之前⼀一定会执⾏行行finally中的代码（如果finally存在），如
+     * 果finally中有return语句句，就会直接执⾏行行finally中的return⽅方法，所以finally中的return语句句
+     * ⼀一定会被执⾏行行的
+     * 执⾏行行流程：finally执⾏行行前的代码⾥里里⾯面有包含return，则会先确定return返回值，然后再执
+     * ⾏行行finally的代码，最后再执⾏行行return
+     */
+    @Test
+    public void testTryCatch(){
+        System.out.println(test1());
+        System.out.println(test2());
+    }
+    private static int test1() {
+        int a = 1;
+        try {
+            System.out.println(a / 0);
+            a = 2;
+        } catch (ArithmeticException e) {
+            a = 3;
+            return a;
+        } finally {
+            a = 4;
+        }
+        return a;
+    }
+
+    private static int test2() {
+        int a = 1;
+        try {
+            System.out.println(a / 0);
+            a = 2;
+        } catch (ArithmeticException e) {
+            a = 3;
+            return a;
+        } finally {
+            a = 4;
+            return a;
+        }
+    }
+
 }
