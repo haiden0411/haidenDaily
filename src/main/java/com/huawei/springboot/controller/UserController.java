@@ -44,4 +44,9 @@ public class UserController
         }
         return user;
     }
+
+    @RequestMapping("/test")
+    public String testpagCommon(){
+        return "test";
+    }
 }
