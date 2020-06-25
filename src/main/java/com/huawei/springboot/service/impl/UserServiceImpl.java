@@ -1,5 +1,4 @@
 package com.huawei.springboot.service.impl;
-import com.huawei.Daliy.Thread.Data;
 import com.huawei.springboot.domain.SysUser;
 import com.huawei.springboot.domain.User;
 import com.huawei.springboot.domain.vo.RegisterReqVO;
@@ -7,10 +6,8 @@ import com.huawei.springboot.domain.vo.UpdateUserReqVO;
 import com.huawei.springboot.mapper.SysUserMapper;
 import com.huawei.springboot.service.UserService;
 import com.huawei.utils.PasswordUtils;
-import com.mkevin.demo1.YieldDemo0;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
