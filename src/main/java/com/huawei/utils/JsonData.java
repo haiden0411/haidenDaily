@@ -1,20 +1,9 @@
 package com.huawei.utils;
 
 import java.io.Serializable;
-/**
- * 功能描述：响应结果类
- *
- * <p>
- * 创建时间：Apr 29, 2018 4:08:36 PM
- * </p>
- *
- * @作者 小D课堂 小D
- */
+
 public class JsonData implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	private Integer code; // 状态码 0 表示成功，1表示处理中，-1表示失败

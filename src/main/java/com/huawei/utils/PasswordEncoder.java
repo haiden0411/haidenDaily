@@ -2,15 +2,7 @@ package com.huawei.utils;
 
 import java.security.MessageDigest;
 
-/**
-* @ClassName:       PasswordEncoder
-*                   密码加密
-* @Author:          小霍
-* @CreateDate:      2019/9/7 13:45
-* @UpdateUser:      小霍
-* @UpdateDate:      2019/9/7 13:45
-* @Version:         0.0.1
-*/
+
 public class PasswordEncoder {
 
 	private final static String[] hexDigits = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d",

@@ -2,11 +2,6 @@ package com.huawei.utils;
 
 import java.util.UUID;
 
-/**
-* @ClassName:       PasswordUtils
-*                   密码工具类
-* @Version:         0.0.1
-*/
 public class PasswordUtils {
 
 	/**
