@@ -1,26 +1,31 @@
 package com.huawei.springboot.controller;
+import com.huawei.springboot.domain.SysUser;
 import com.huawei.springboot.domain.User;
+import com.huawei.springboot.domain.vo.RegisterReqVO;
+import com.huawei.springboot.domain.vo.UpdateUserReqVO;
+import com.huawei.springboot.mapper.SysUserMapper;
 import com.huawei.springboot.service.UserService;
 import com.huawei.springboot.service.UserValidator;
+import io.swagger.annotations.Api;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 /**
  * Author：胡灯
  * Date：2020-06-02 23:13
  * Description：<描述>
  */
-@Controller
-@RequestMapping("/user")
+@RestController
+@RequestMapping("/api")
+@Api(tags="用户模块",description = "用户模块相关接口")
 public class UserController
 {
     @Autowired
     private UserService userService;
 
-    @RequestMapping("/print")
-    @ResponseBody
+    @GetMapping("/print")
     public User printUser(int id, String name, int age){
         User user = new User();
         user.setId(id);
@@ -29,9 +34,7 @@ public class UserController
         userService.printUser(user);
         return user;
     }
-
-    @RequestMapping("/vp")
-    @ResponseBody
+    @GetMapping("/vp")
     public User validateAndPut(int id, String name, int age){
         User user = new User();
         user.setId(id);
@@ -45,8 +48,24 @@ public class UserController
         return user;
     }
 
-    @RequestMapping("/test")
-    public String testpagCommon(){
-        return "test";
+    @GetMapping("/user/{id}")
+    public SysUser findUserById(@PathVariable  String id){
+       return userService.getUserInfo(id);
+    }
+
+    @PostMapping("/user")
+    public String insertUser(@RequestBody  RegisterReqVO vo){
+
+        return userService.register(vo);
+    }
+
+    @PutMapping("/user")
+    public String updateUser(@RequestBody UpdateUserReqVO vo){
+        return userService.updateUserInfo(vo);
+    }
+
+    @DeleteMapping("/user/{id}")
+    public String deleteUser(@PathVariable  String id){
+        return userService.deletedUserInfo(id);
     }
 }

@@ -51,7 +51,7 @@ public class TestRestTemplate
     @Test
     public void testPostMutiPara(){
         RestTemplate restTemplate = new RestTemplate();
-        String url = "http://localhost:8080/user/format";
+        String url = "http://localhost:8080/api/format";
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.MULTIPART_FORM_DATA);
         LinkedMultiValueMap<String, Object> reqeustBody = new LinkedMultiValueMap<>();
@@ -74,7 +74,7 @@ public class TestRestTemplate
     @Test
     public void testAop(){
         RestTemplate restTemplate = new RestTemplate();
-        String url = "http://localhost:8080/user/print?id=10&name=haiden&age=20";
+        String url = "http://localhost:8080/api/print?id=10&name=haiden&age=20";
         User forObject = restTemplate.getForObject(url, User.class);
         System.out.println(forObject);
 
