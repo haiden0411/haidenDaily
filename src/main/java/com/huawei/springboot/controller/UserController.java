@@ -1,6 +1,8 @@
 package com.huawei.springboot.controller;
 import com.huawei.springboot.domain.SysUser;
 import com.huawei.springboot.domain.User;
+import com.huawei.springboot.domain.vo.LoginReqVo;
+import com.huawei.springboot.domain.vo.LoginRespVo;
 import com.huawei.springboot.domain.vo.RegisterReqVO;
 import com.huawei.springboot.domain.vo.UpdateUserReqVO;
 import com.huawei.springboot.mapper.SysUserMapper;
@@ -58,8 +60,6 @@ public class UserController
 
     @GetMapping("/user/{id}")
     @ApiOperation("获取用户信息接口")
-    @ApiResponses({@ApiResponse(code = 0,message = "成功",response = SysUser.class)})
-    @ApiImplicitParams({@ApiImplicitParam(name = "id",value = "用户ID",dataType ="String",paramType = "query",required = true,defaultValue = "0f09e661-7e80-4e1b-b66a-2e266bb593bf")})
     public SysUser findUserById(@ApiParam(value = "用户ID",required = true) @PathVariable  String id,HttpServletRequest request){
         System.out.println(request.getHeader("token"));
         return userService.getUserInfo(id);
@@ -79,5 +79,12 @@ public class UserController
     @DeleteMapping("/user/{id}")
     public String deleteUser(@PathVariable  String id){
         return userService.deletedUserInfo(id);
+    }
+
+
+    @PostMapping("/user/login")
+    @ApiOperation(value = "用户登录接口")
+    public LoginRespVo login(@RequestBody LoginReqVo vo){
+       return  userService.login(vo);
     }
 }

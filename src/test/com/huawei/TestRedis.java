@@ -22,7 +22,6 @@ public class TestRedis
     @Autowired
     private RedisService redisService;
 
-    @Autowired
     @Test
     public void testRedis1(){
         //System.out.println(redisService.exists("name"));
@@ -33,6 +32,7 @@ public class TestRedis
     @Test
     public void testRedisTemplate(){
         System.out.println(redisService.get("aa"));
+        redisService.set("name","haiden");
     }
 
 

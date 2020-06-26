@@ -1,6 +1,8 @@
 package com.huawei.springboot.service;
 import com.huawei.springboot.domain.SysUser;
 import com.huawei.springboot.domain.User;
+import com.huawei.springboot.domain.vo.LoginReqVo;
+import com.huawei.springboot.domain.vo.LoginRespVo;
 import com.huawei.springboot.domain.vo.RegisterReqVO;
 import com.huawei.springboot.domain.vo.UpdateUserReqVO;
 /**
@@ -19,4 +21,6 @@ public interface UserService
     String updateUserInfo(UpdateUserReqVO vo);
 
     String deletedUserInfo(String id);
+
+    LoginRespVo login(LoginReqVo vo);
 }

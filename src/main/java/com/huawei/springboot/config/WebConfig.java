@@ -1,5 +1,6 @@
 package com.huawei.springboot.config;
 import com.huawei.springboot.interceptor.Intercepttor1;
+import com.huawei.springboot.interceptor.TokenInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -23,9 +24,8 @@ public class WebConfig implements WebMvcConfigurer
     @Override
     public void addInterceptors(InterceptorRegistry registry)
     {
-        InterceptorRegistration ir = registry.addInterceptor(new Intercepttor1());
-        ir.addPathPatterns("/interceptor/*");
-        registry.addInterceptor(localeChangeInterceptor());
+        registry.addInterceptor(new Intercepttor1()).addPathPatterns("/interceptor/*");
+        registry.addInterceptor(tokenInterceptor()).addPathPatterns("/api/**").excludePathPatterns("/api/user/login","/api/user/register","/api/user/code/*");
 
     }
     @Bean(name="localeResolver")
@@ -44,5 +44,10 @@ public class WebConfig implements WebMvcConfigurer
         lci = new LocaleChangeInterceptor();
         lci.setParamName("language");
         return lci;
+    }
+
+    @Bean
+    public TokenInterceptor tokenInterceptor(){
+        return new TokenInterceptor();
     }
 }
