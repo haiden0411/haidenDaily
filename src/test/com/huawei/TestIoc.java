@@ -3,8 +3,13 @@ import com.huawei.Daily_App;
 import com.huawei.springboot.config.ParamsBean;
 import com.huawei.springboot.domain.pojo.BussinessPerson;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import java.util.concurrent.Executor;
 
 import static org.junit.Assert.*;
 /**
@@ -38,6 +43,16 @@ public class TestIoc
         ParamsBean paramsBean1 = app.getBean(ParamsBean.class);
         ParamsBean paramsBean2 = app.getBean(ParamsBean.class);
         assertSame(paramsBean1,paramsBean2);
+    }
+
+    @Test
+    public void testExcecuotr(){
+        AnnotationConfigApplicationContext app = new AnnotationConfigApplicationContext(Daily_App.class);
+        ThreadPoolTaskExecutor myTaskExecutor = (ThreadPoolTaskExecutor) app.getBean("myTaskExecutor");
+        myTaskExecutor.execute(() -> {
+            System.out.println("aa");
+        });
+
     }
 
 }
