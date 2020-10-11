@@ -14,15 +14,15 @@ spring:
         max-idle: 30
         min-idle: 1
     timeout: PT10S
-    host: 192.168.1.109
-    port: 8001
+    host: 192.168.1.120
+    port: 6380
 
   messages:
     encoding: utf-8
     basename: international
     cache-duration: 3600
   datasource:
-    url: jdbc:mysql://192.168.1.109:3307/test?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+    url: jdbc:mysql://192.168.1.120:3307/test?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
     username: root
     password: root
     tomcat:

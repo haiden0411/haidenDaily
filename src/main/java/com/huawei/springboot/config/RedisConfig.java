@@ -1,11 +1,14 @@
 package com.huawei.springboot.config;
+import com.huawei.springboot.listener.KeyExpireLisener;
 import com.huawei.springboot.serializer.MyStringRedisSerializer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
@@ -17,6 +20,8 @@ import redis.clients.jedis.JedisPoolConfig;
 @Configuration
 public class RedisConfig
 {
+    @Autowired
+    private RedisConnectionFactory redisConnectionFactory;
     @Value("${redis.host}")
     private String host;
     @Value("${redis.port}")
@@ -51,6 +56,18 @@ public class RedisConfig
         redisTemplate.setValueSerializer(new MyStringRedisSerializer());
         redisTemplate.setHashValueSerializer(new MyStringRedisSerializer());
         return redisTemplate;
+    }
+
+    @Bean
+    public RedisMessageListenerContainer redisMessageListenerContainer(){
+        RedisMessageListenerContainer redisMessageListenerContainer = new RedisMessageListenerContainer();
+        redisMessageListenerContainer.setConnectionFactory(redisConnectionFactory);
+        return redisMessageListenerContainer;
+    }
+
+    @Bean
+    public KeyExpireLisener keyExpireLisener(){
+        return new KeyExpireLisener(this.redisMessageListenerContainer());
     }
 
 }
