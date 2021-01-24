@@ -22,6 +22,7 @@ import java.util.concurrent.*;
 import static java.util.Comparator.comparingInt;
 import static java.util.stream.Collectors.counting;
 
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -95,15 +96,15 @@ public class TestJava8
     public void test02()
     {
         List<Dish> vegetarian = menu.stream().filter(Dish::isVegetarian).collect(toList());
-        vegetarian.forEach(System.out::println);
+        printCollection(vegetarian);
         List<Integer> numbers = Arrays.asList(1, 2, 2, 2, 4, 3, 4, 5, 6, 7, 20, 45);
         numbers.stream().filter(i -> i % 2 == 0).distinct().forEach(System.out::println);
         List<Dish> dishes = menu.stream().filter(dish -> dish.getCalories() > 300).skip(2).collect(toList());
-        dishes.forEach(System.out::println);
+        printCollection(dishes);
         //练习
         System.out.println("-----------------------");
         List<Dish> meateDish = menu.stream().filter(dish -> dish.getType() == Dish.Type.MEAT).limit(2).collect(toList());
-        meateDish.forEach(System.out::println);
+        printCollection(meateDish);
     }
     @Test
     public void testStreamMap()
@@ -377,11 +378,26 @@ public class TestJava8
         ps.close();
         conn.close();
     }
-
     @Test
-    public void testUnmodifyCollection(){
+    public void testCollector2()
+    {
+        System.out.println("-----------sort");
+        List<Dish> collect = menu.stream().sorted(comparing(Dish::getCalories).reversed()).collect(toList());
+        printCollection(collect);
+        System.out.println("-----------summaryInt");
+        Integer intValue = menu.stream().collect(summingInt(Dish::getCalories));
+        System.out.println(intValue);
+        System.out.println("-----------maptoint");
+        int sum = menu.stream().mapToInt(Dish::getCalories).sum();
+        System.out.println(sum);
+        System.out.println("-----------reducet");
+        Integer sum2 = menu.stream().map(Dish::getCalories).reduce(0, Integer::sum);
+        System.out.println(sum2);
     }
-
+    private void printCollection(Iterable<Dish> collect)
+    {
+        collect.forEach(System.out::println);
+    }
     private Double doSomethingAction()
     {
         return new Double(250);
