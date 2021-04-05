@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit;
 public class ThreadPoolDemo2 {
     public static void main(String[] args) throws InterruptedException {
 
-        /*Runner runner = new Runner();
+       /* Runner runner = new Runner();
         ExecutorService executorService = Executors.newFixedThreadPool(3);
         executorService.submit(runner);
         executorService.submit(runner);

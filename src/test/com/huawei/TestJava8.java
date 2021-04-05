@@ -13,6 +13,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.*;
 
 import static java.util.Comparator.comparing;
@@ -22,11 +26,13 @@ import java.util.concurrent.*;
 import static java.util.Comparator.comparingInt;
 import static java.util.stream.Collectors.counting;
 
+import java.util.function.BiPredicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import com.huawei.springboot.domain.Dish;
+import com.huawei.utils.Java8Utils;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -183,10 +189,11 @@ public class TestJava8
         ;
         //生成勾股数
         printSeparate();
-        Stream<int[]> pythagoreanTriples = IntStream.rangeClosed(1, 100).boxed().flatMap
-                (a -> IntStream.rangeClosed(a, 100).
-                        filter(b -> Math.sqrt(a * a + b * b) % 1 == 0).
-                        mapToObj(b -> new int[]{a, b, (int) Math.sqrt(a * a + b * b)}));
+        Stream<int[]> pythagoreanTriples = IntStream.rangeClosed(1, 100)
+                .boxed()
+                .flatMap(a -> IntStream.rangeClosed(a, 100)
+                        .filter(b -> Math.sqrt(a * a + b * b) % 1 == 0)
+                        .mapToObj(b -> new int[]{a, b, (int) Math.sqrt(a * a + b * b)}));
         IntStream.rangeClosed(1, 100).boxed().flatMap(a -> IntStream.rangeClosed(a, 100).
                 mapToObj(b -> new double[]{a, b, (double) Math.sqrt(a * a + b * b)}).filter(t -> t[2] % 1 == 0));
         pythagoreanTriples.limit(5).forEach(t -> System.out.println(t[0] + "," + t[1] + "," + t[2]));
@@ -316,10 +323,10 @@ public class TestJava8
             IntStream.range(0, 100).parallel().forEach(lists::add);
         }
     }
-
     @Test
-    public void testJoin(){
-        List<String> lists = Arrays.asList("spring", "struts", "hibernate","css","html","bat");
+    public void testJoin()
+    {
+        List<String> lists = Arrays.asList("spring", "struts", "hibernate", "css", "html", "bat");
         String collect = lists.stream().collect(joining("||", "[", "]"));
         System.out.println(collect);
         Map<Boolean, List<String>> collect1 = lists.stream().collect(partitioningBy(s -> s.length() > 4));
@@ -329,14 +336,12 @@ public class TestJava8
         IntSummaryStatistics collect3 = menu.stream().collect(summarizingInt(Dish::getCalories));
         System.out.println(collect3);
     }
-
     @Test
     public void testTry()
     {
         String path = "";
-        try( OutputStream ops = new FileOutputStream(path);)
+        try (OutputStream ops = new FileOutputStream(path);)
         {
-
             ops.write("aaa".getBytes("UTF-8"));
         }
         catch (Exception e)
@@ -344,7 +349,6 @@ public class TestJava8
             e.printStackTrace();
         }
     }
-
     @Test
     public void testDatasourceInsert() throws SQLException
     {
@@ -352,16 +356,15 @@ public class TestJava8
         Connection conn = dataSource.getConnection();
         String sql1 = "insert into t_customer(address,gender,name,telephone) values (?,?,?,?)";
         PreparedStatement ps = conn.prepareStatement(sql1);
-        ps.setString(1,"英山");
-        ps.setString(2,"女");
-        ps.setString(3,"小贺");
-        ps.setString(4,"1589985835");
+        ps.setString(1, "英山");
+        ps.setString(2, "女");
+        ps.setString(3, "小贺");
+        ps.setString(4, "1589985835");
         int i = ps.executeUpdate();
         System.out.println(i);
         ps.close();
         conn.close();
     }
-
     @Test
     public void testDatasoruceQuery() throws SQLException
     {
@@ -394,7 +397,40 @@ public class TestJava8
         Integer sum2 = menu.stream().map(Dish::getCalories).reduce(0, Integer::sum);
         System.out.println(sum2);
     }
-    private void printCollection(Iterable<Dish> collect)
+    @Test
+    public void testFlat()
+    {
+        String[] arrayOfWords = {"Goodbye", "World"};
+        Stream<String> words = Arrays.stream(arrayOfWords);
+        List<String> collect = words.map(s -> s.split(" ")).flatMap(Arrays::stream).distinct().collect(toList());
+        List<Integer> num1 = Arrays.asList(1, 2, 3);
+        List<Integer> num2 = Arrays.asList(3, 4, 5, 6);
+        List<int[]> collect1 = num1.stream()
+                .flatMap(a -> num2.stream().map(b -> new int[]{a, b}))
+                .collect(toList());
+        collect1.forEach(integers -> System.out.println(integers[0] + "-" + integers[1]));
+        //勾股数
+        List<double[]> collect2 = IntStream.rangeClosed(1, 100)
+                .boxed()
+                .flatMap(a -> IntStream.rangeClosed(a, 100)
+                       .mapToObj(b -> new double[]{a, b, Math.sqrt(a*a+b*b)})
+                       .filter(t -> t[2] % 1 == 0)).collect(toList());
+        collect2.forEach(ints -> System.out.println(ints[0] + "-" + ints[1] + "-" + ints[2]));
+    }
+    @Test
+    public void testGetPropery()
+    {
+        List<String> aa = Java8Utils.getConfigList("sffaf");
+        aa.forEach(System.out::println);
+
+    }
+    @Test
+    public void testMillToLocalDate()
+    {
+        System.out.println(Java8Utils.mill2LocalDate(new Date().getTime()));
+        System.out.println(Java8Utils.LocalDate2Date(LocalDate.now()));
+    }
+    private void printCollection(Iterable<?> collect)
     {
         collect.forEach(System.out::println);
     }

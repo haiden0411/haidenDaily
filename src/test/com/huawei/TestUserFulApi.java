@@ -19,11 +19,13 @@ import java.nio.file.Paths;
 import java.nio.file.attribute.UserPrincipal;
 import java.time.LocalDate;
 import java.time.temporal.ChronoField;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import java.io.File;
 import java.io.IOException;
@@ -324,6 +326,21 @@ public class TestUserFulApi
     public void testTryCatch(){
         System.out.println(test1());
         System.out.println(test2());
+    }
+    @Test
+    public void testCharString()
+    {
+        String name = "haiden";
+        String s = "'";
+        char c = s.charAt(0);
+        System.out.println(c);
+        System.out.println(Strings.padStart(name, name.length()+1, c));
+        System.out.println(StringUtils.leftPad(name, name.length() + 1, c));
+        StringBuilder append = new StringBuilder().append("'").append(name).append("'");
+        System.out.println(append);
+        List<LocalDate> collect = Stream.iterate(LocalDate.now(), d -> d.plusDays(1)).limit(10).collect(Collectors.toList());
+        collect.forEach(System.out::println);
+        System.out.println("string".charAt(0)*new Random().nextDouble());
     }
     private static int test1() {
         int a = 1;

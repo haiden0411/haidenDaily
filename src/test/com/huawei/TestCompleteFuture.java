@@ -1,10 +1,19 @@
 package com.huawei;
 import org.junit.Test;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.function.BiFunction;
+import java.util.function.BinaryOperator;
+import java.util.stream.Collectors;
 /**
  * Author：胡灯
  * Date：2020-05-21 21:24
@@ -13,20 +22,21 @@ import java.util.concurrent.TimeoutException;
 public class TestCompleteFuture
 {
     @Test
-    public void test01()
+    public void test01() throws ExecutionException, InterruptedException
     {
         //直接创建任务，并设置返回值
         CompletableFuture<String> task1 = CompletableFuture.completedFuture("hi");
         //创建一个不带返回值的异步执行任务
         CompletableFuture<Void> task2 = CompletableFuture.runAsync(() ->
         {
+            delay(10);
             System.out.println("hi");
         });
         //创建一个带有返回值的异步执行任务
         CompletableFuture.supplyAsync(() -> {
             return "hi";
         });
-
+        System.out.println(task2.join());
     }
 
     @Test
@@ -97,10 +107,11 @@ public class TestCompleteFuture
     public void test05() throws Exception
     {
         CompletableFuture<Integer> task1 = CompletableFuture.supplyAsync(() -> {
+            delay(3);
             return Integer.parseInt("1");
         });
         Thread.sleep(1000);
-        boolean complete = task1.complete(1);
+        boolean complete = task1.complete(10);
         System.out.println(complete);
         System.out.println(task1.get());
 
@@ -209,6 +220,39 @@ public class TestCompleteFuture
         System.out.println(task.isDone());
         System.out.println(task.isCancelled());
     }
+    @Test
+    public void testAllofAndAnyOf()
+    {
+        /*CompletableFuture<Void> a1 = getVoidCompletableFuture(3, "a1");
+        CompletableFuture<Void> a2 = getVoidCompletableFuture(4, "a2");
+        CompletableFuture<Void> a3 = getVoidCompletableFuture(5, "a3");
+        CompletableFuture<Void> a4 = getVoidCompletableFuture(6, "a4");
+        List<CompletableFuture<Void>> futures = Arrays.asList(a1, a2, a3,a4);*/
+        //CompletableFuture.allOf(a1,a2,a3).join();
+        //CompletableFuture.anyOf(futures.toArray(new CompletableFuture[futures.size()])).join();
+        //futures.stream().map(CompletableFuture::join).forEach(unused -> {});
+        List<String> strings = Arrays.asList("a1", "a2", "a3", "a4");
+        List<CompletableFuture<Void>> collect = strings.stream()
+                .map(s -> getVoidCompletableFuture(3, s))
+                .collect(Collectors.toList());
+        collect.stream().map(CompletableFuture::join).collect(Collectors.toList());
+    }
+    private CompletableFuture<Void> getVoidCompletableFuture(int i, String s)
+    {
+        return CompletableFuture.runAsync(() ->
+        {
+            delay(i);
+            System.out.println(s + LocalDateTime.now());
+        });
+    }
+    @Test
+    public void testRandow()
+    {
+        for (int i = 0; i < 10; i++)
+        {
+            System.out.println(new Random());
+        }
+    }
     private void delay(int n){
         try
         {
@@ -218,5 +262,9 @@ public class TestCompleteFuture
         {
             e.printStackTrace();
         }
+    }
+
+    private BigInteger getResult(BigInteger a, BigInteger b , BinaryOperator<BigInteger> binaryOperator){
+        return binaryOperator.apply(a,b);
     }
 }

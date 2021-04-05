@@ -2,16 +2,18 @@ package com.huawei.mimaxueyuan.mkevin.demo14;
 
 import com.huawei.mimaxueyuan.mkevin.entity.P;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 public class ThreadPoolDemo1 {
     public static void main(String[] args) throws InterruptedException {
 
         // 创建线程池，而不提交任何任务，则无任何线程被创建，程序直接运行结束
-        /*ExecutorService executorService = Executors.newCachedThreadPool();
+       /* ExecutorService executorService = Executors.newCachedThreadPool();
         P.l("main is over");*/
 
         // 创建线程池，并向线程池提交任务，则创建线程，任务执行完毕而线程不销毁，JVM继续运行
         // 等待60秒后，自动销毁空闲线程，JVM退出
-        /*Runner runner = new Runner();
+       /* Runner runner = new Runner();
         ExecutorService executorService = Executors.newCachedThreadPool();
         executorService.submit(runner);
         P.l("main is over");*/
@@ -19,7 +21,7 @@ public class ThreadPoolDemo1 {
 
         // 创建线程池，并向线程池提交任务，则创建线程，任务执行完毕而线程不销毁，JVM继续运行
         // 始终保持有1个线程存活，所以JVM不会退出
-        /*Runner runner = new Runner();
+       /* Runner runner = new Runner();
         ExecutorService executorService = Executors.newFixedThreadPool(1);
         executorService.submit(runner);
         P.l("main is over");*/
@@ -33,7 +35,7 @@ public class ThreadPoolDemo1 {
         P.l("main is over");*/
 
         //shutdown之后提交的任务会抛出RejectedExecutionException异常，代表拒绝接收
-        /*Runner runner = new Runner();
+       /* Runner runner = new Runner();
         ExecutorService executorService = Executors.newFixedThreadPool(3);
         executorService.submit(runner);
         executorService.shutdown();
@@ -49,16 +51,16 @@ public class ThreadPoolDemo1 {
         executorService.submit(new Runner());*/
 
         //如果任务中没有触发InterruptedException的条件，则任务会继续运行直到结束
-        /*ExecutorService executorService = Executors.newFixedThreadPool(5);
+       /* ExecutorService executorService = Executors.newFixedThreadPool(5);
         executorService.submit(new Runner1());
         executorService.shutdownNow();
         P.l("main is over");*/
 
         //可以在任务中判断Thread.currentThread().isInterrupted()来规避shutdownNow的问题
-        /*ExecutorService executorService = Executors.newFixedThreadPool(5);
+        ExecutorService executorService = Executors.newFixedThreadPool(5);
         executorService.submit(new Runner2());
         executorService.shutdownNow();
-        P.l("main is over");*/
+        P.l("main is over");
     }
 
     static class Runner implements Runnable {

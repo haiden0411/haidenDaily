@@ -1,10 +1,17 @@
 package com.huawei.utils;
 
+import com.google.common.base.Joiner;
+import com.google.common.base.Splitter;
 import com.huawei.javaBase.CompletableFuture.Shop;
 import com.huawei.javaBase.paralleStream.Accumulator;
 import com.huawei.javaBase.paralleStream.FokJoinSumCalculator;
-import java.util.Arrays;
-import java.util.List;
+import org.assertj.core.util.Lists;
+
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -161,5 +168,49 @@ public class Java8Utils
                 .map(CompletableFuture::join)
                 .collect(Collectors.toList());
     }
+    /**
+     * 取配置文件的值，转成list
+     * @param name
+     * @return
+     */
+    public static List<String> getConfigList(String name){
+        ResourceBundle config = ResourceBundle.getBundle("config");
+        return config.keySet()
+                .stream()
+                .peek(s -> System.out.println(s))
+                .filter(s -> Objects.equals(s, name))
+                .map(s -> Lists.newArrayList(Splitter.on(",").omitEmptyStrings()
+                        .trimResults().split(config.getString(s))))
+                .findFirst()
+                .orElseGet(Lists::newArrayList);
+    }
+    /**
+     * 取配置文件的值
+     * @param name
+     * @return
+     */
+    public static String getProperty(String name)
+    {
+        ResourceBundle config = ResourceBundle.getBundle("config");
+        return config.keySet()
+                .stream()
+                .filter(s -> Objects.equals(s, name))
+                .map(config::getString)
+                .findFirst()
+                .orElseGet(() -> "unkown");
+    }
+    public static LocalDate mill2LocalDate(long millis)
+    {
+       return Instant.ofEpochMilli(millis).atZone(ZoneId.systemDefault()).toLocalDate();
+    }
+    public static Date LocalDate2Date(LocalDate localDate)
+    {
+        return Date.from(localDate.atStartOfDay().toInstant(ZoneOffset.of("+8")));
+    }
+    public static LocalDate date2LocalDate(Date date)
+    {
+        return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+    }
+
 
 }

@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit;
 public class TaskRemoveDemo {
     public static void main(String[] args) throws InterruptedException {
 
-        /*P.o("运行中的任务不能删除的~ 你想啥呢....");
+       /* P.o("运行中的任务不能删除的~ 你想啥呢....");
         Runner runner = new Runner();
         ThreadPoolExecutor executor = new ThreadPoolExecutor(1, 1, 100,
                 TimeUnit.SECONDS, new LinkedBlockingDeque<>());
@@ -20,7 +20,7 @@ public class TaskRemoveDemo {
         P.l(remove);
         P.l("线程池中的任务数:"+executor.getTaskCount());*/
 
-        /*P.o("execute方法提交的任务，未运行时可以删除~");
+        P.o("execute方法提交的任务，未运行时可以删除~");
         Runner runner1 = new Runner();
         Runner runner2 = new Runner();
         ThreadPoolExecutor executor = new ThreadPoolExecutor(1, 1, 100,
@@ -31,9 +31,9 @@ public class TaskRemoveDemo {
         P.l("线程池中的任务数:"+executor.getTaskCount());
         boolean remove = executor.remove(runner2);
         P.l(remove);
-        P.l("线程池中的任务数:"+executor.getTaskCount());*/
+        P.l("线程池中的任务数:"+executor.getTaskCount());
 
-        P.o("submit方法提交的任务，未运行时不可以删除~ 大坑！！！");
+        /*P.o("submit方法提交的任务，未运行时不可以删除~ 大坑！！！");
         Runner runner1 = new Runner();
         Runner runner2 = new Runner();
         ThreadPoolExecutor executor = new ThreadPoolExecutor(1, 1, 100,
@@ -44,7 +44,7 @@ public class TaskRemoveDemo {
         P.l("线程池中的任务数:"+executor.getTaskCount());
         boolean remove = executor.remove(runner2);
         P.l(remove);
-        P.l("线程池中的任务数:"+executor.getTaskCount());
+        P.l("线程池中的任务数:"+executor.getTaskCount());*/
     }
 
     static class Runner implements Runnable {
