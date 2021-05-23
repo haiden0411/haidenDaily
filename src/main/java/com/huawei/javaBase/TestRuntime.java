@@ -1,8 +1,13 @@
 package com.huawei.javaBase;
 
-import java.io.IOException;
-import java.util.concurrent.TimeUnit;
+import org.junit.Test;
 
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import java.util.function.BiPredicate;
+import java.util.function.Function;
 /**
  * Author：胡灯
  * Date：2019-08-22 22:03
@@ -27,5 +32,14 @@ public class TestRuntime
         }
         System.out.println("脚本执行完毕");
 
+    }
+
+    @Test
+    public void test01(){
+        List<String> str = Arrays.asList("a","b","A","B");
+        //str.sort((o1, o2) -> o1.compareToIgnoreCase(o2));
+        str.sort(String::compareToIgnoreCase);
+        Function<String, Integer> stringToInteger = Integer::parseInt;
+        BiPredicate<List<String>, String> contains = List::contains;
     }
 }

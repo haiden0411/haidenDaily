@@ -1,10 +1,11 @@
 package com.huawei;
+import com.google.common.base.Splitter;
 import com.huawei.Daliy.dataSource.MyDataSource;
-import com.huawei.springboot.domain.Apple;
-import com.huawei.springboot.domain.Trader;
-import com.huawei.springboot.domain.Transaction;
+import com.huawei.Generic.FunctionWithException;
+import com.huawei.springboot.domain.*;
 
 import java.io.*;
+import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -27,14 +28,17 @@ import static java.util.Comparator.comparingInt;
 import static java.util.stream.Collectors.counting;
 
 import java.util.function.BiPredicate;
+import java.util.function.Function;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import com.huawei.springboot.domain.Dish;
 import com.huawei.utils.Java8Utils;
 import org.junit.Before;
 import org.junit.Test;
+import static org.junit.Assert.*;
 
 import static java.util.stream.Collectors.*;
 /**
@@ -44,6 +48,7 @@ import static java.util.stream.Collectors.*;
  */
 public class TestJava8
 {
+    private Logger logger = Logger.getLogger(this.getClass().getName());
     private List<String> lists = new ArrayList<>();
     private List<Apple> apples = new ArrayList<>();
     List<Dish> menu = new ArrayList<>();
@@ -269,7 +274,8 @@ public class TestJava8
                 " Nel mezzo del cammin di nostra vita " +
                         "mi ritrovai in una selva oscura" +
                         " ché la dritta via era smarrita ";
-        Stream<Character> characterStream = IntStream.rangeClosed(0, SENTENCE.length()).mapToObj(SENTENCE::charAt);
+        Stream<Character> characterStream = IntStream.rangeClosed(0, SENTENCE.length()-1).mapToObj(SENTENCE::charAt);
+        System.out.println(characterStream.collect(toList()));
     }
     @Test
     public void testFuture()
@@ -286,6 +292,7 @@ public class TestJava8
         try
         {
             Double result = submit.get(1, TimeUnit.SECONDS);
+            System.out.println(result);
         }
         catch (InterruptedException e)
         {
@@ -422,7 +429,6 @@ public class TestJava8
     {
         List<String> aa = Java8Utils.getConfigList("sffaf");
         aa.forEach(System.out::println);
-
     }
     @Test
     public void testMillToLocalDate()
@@ -430,12 +436,122 @@ public class TestJava8
         System.out.println(Java8Utils.mill2LocalDate(new Date().getTime()));
         System.out.println(Java8Utils.LocalDate2Date(LocalDate.now()));
     }
+    @Test
+    public void testToMap()
+    {
+        List<String> lists = Arrays.asList("spring", "struts", "hibernate", "css", "html", "bat","spring","spring");
+        Map<String, Integer> collect = lists.stream().collect(toMap(Function.identity(), s -> 1, (integer, integer2) -> ++integer));
+        assertEquals(collect.get("spring"),Integer.valueOf(3));
+    }
+
+//    @Test
+    public void testCollect(){
+        Map<Dish.Type, Dish> collect = menu.stream().collect(groupingBy(Dish::getType, collectingAndThen(maxBy(comparingInt(Dish::getCalories)), Optional::get)));
+        System.out.println(collect);
+        System.out.println(menu.stream().collect(counting()));
+        System.out.println(menu.stream().collect(summingInt(Dish::getCalories)));
+        System.out.println(menu.stream().collect(maxBy(comparingInt(Dish::getCalories))));
+        menu.stream().collect(reducing(0, Dish::getCalories, Integer::sum));
+        menu.stream().collect(collectingAndThen(toList(), List::size));
+    }
+    @Test
+    public void testRemoveIF()
+    {
+        List<Integer> nums = new ArrayList<>();
+        nums.add(-3);
+        nums.add(1);
+        nums.add(4);
+        nums.add(-1);
+        nums.add(5);
+        nums.add(9);
+        boolean removed = nums.removeIf(n -> n <= 0);
+        System.out.println("Elements were " + (removed ? "" : "NOT") + " removed");
+        nums.forEach(System.out::println);
+    }
+    @Test
+    public void testMapForEach()
+    {
+        Map<Long, String> map = new HashMap<>();
+        map.put(86L, "Don Adams (Maxwell Smart)");
+        map.put(99L, "Barbara Feldon");
+        map.put(13L, "David Ketchum");
+        map.forEach((aLong, s) -> System.out.printf("agent %d,played by %s%n",aLong,s));
+    }
+    @Test
+    public void testLogSupplier()
+    {
+        User user = new User();
+        user.setId(1);
+        user.setAge(20);
+        user.setName("haiden");
+        logger.setLevel(Level.WARNING);
+        //会执行user.toString方法
+        logger.info("aa1:"+user.toString());
+        //不会执行user.toString方法
+        logger.info(() -> "aa:"+user.toString());
+
+    }
+    
+    @Test
+    public void testComposeAndThen(){
+        Function<Integer, Integer> add2 = x -> x + 2;
+        Function<Integer, Integer> mult3 = x -> x * 3;
+        Function<Integer, Integer> multi3add2 = add2.compose(mult3);
+        Function<Integer, Integer> add2Multi3 = add2.andThen(mult3);
+        System.out.println("multi3add2.apply(1) = " + multi3add2.apply(1));
+        System.out.println("add2Muti3.apply(1) = " + add2Multi3.apply(1));
+        assertEquals(multi3add2.apply(1).intValue(),5);
+        assertEquals(add2Multi3.apply(1).intValue(),9);
+    }
+    @Test
+    public void testFunctionWithException()
+    {
+
+    }
+
+    // 为lambda 表达式添加一个try/catch 代码块，或委托给某个提取的方法进行处理。
+    public List<String> encodeValues(String... values) {
+        return Arrays.stream(values)
+                .map(this::encodeString).collect(Collectors.toList());
+    }
+
+    private String encodeString(String s)
+    {
+        try
+        {
+            return URLEncoder.encode(s, "UTF-8");
+        }
+        catch (UnsupportedEncodingException e)
+        {
+           throw new RuntimeException();
+        }
+    }
+    private List<String> encodeValuesWithWrapper(String... values)
+    {
+        return Arrays.stream(values)
+                .map(wrapper(s->URLEncoder.encode(s,"UTF-8")))
+                .collect(toList());
+    }
     private void printCollection(Iterable<?> collect)
     {
         collect.forEach(System.out::println);
     }
-    private Double doSomethingAction()
+    private Double doSomethingAction() throws InterruptedException
     {
+        Thread.sleep(2000);
         return new Double(250);
+    }
+    private static<T,R,E extends Exception> Function<T,R> wrapper(FunctionWithException<T,R,E> fe)
+    {
+        return arg->{
+            try
+            {
+                return fe.apply(arg);
+            }
+            catch (Exception e)
+            {
+               throw new RuntimeException();
+            }
+        };
     }
 }

@@ -1,4 +1,5 @@
 package com.huawei.javaBase;
+import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,14 +9,13 @@ import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
+import static java.util.Arrays.*;
 /**
  * Author：胡灯
  * Date：2019-08-28 22:34
@@ -72,7 +72,6 @@ public class TestJava8
         Map<String, String> map = changFileToMap(file);
         System.out.println(map);
     }
-
     private static Map<String, List<String>> getResult(List<String> results)
     {
         Map<String, List<String>> result = new HashMap<>();
@@ -87,8 +86,7 @@ public class TestJava8
                 values = new ArrayList<>();
                 values.add(value);
                 result.put(key, values);
-            }
-            else
+            } else
             {
                 result.get(key).add(value);
                 result.put(key, values);
@@ -96,7 +94,6 @@ public class TestJava8
         }
         return result;
     }
-
     private static Map<String, String> changFileToMap(File f) throws IOException
     {
         Path path = Paths.get(f.getAbsolutePath());
@@ -110,4 +107,65 @@ public class TestJava8
         }
         return maps;
     }
+    interface Task
+    {
+        public void execute();
+    }
+    public static void doSomething(Runnable r)
+    {
+        r.run();
+    }
+    public static void doSomething(Task a)
+    {
+        a.execute();
+    }
+    @Test
+    public void testInteface()
+    {
+        doSomething((Runnable) () -> System.out.println("aa"));
+    }
+    @Test
+    public void testIntstreamSkip()
+    {
+        IntStream intStream = IntStream.rangeClosed(1, 100);
+        IntStream primes = primes(intStream);
+    }
+    @Test
+    public void testFlatmap()
+    {
+        List<Integer> collect = Stream.of(asList(1, 2), asList(3, 4))
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
+        collect.forEach(System.out::println);
+    }
+    private static IntStream numbers()
+    {
+        return IntStream.iterate(2, n -> n + 1);
+    }
+    private static int head(IntStream numbers)
+    {
+        return numbers().findFirst().getAsInt();
+    }
+    private static IntStream tail(IntStream numbers)
+    {
+        return numbers().skip(1);
+    }
+    private static IntStream primes(IntStream numbers)
+    {
+        int head = head(numbers);
+        return IntStream.concat(IntStream.of(head),primes(tail(numbers).filter(n->n%head!=0)));
+
+    }
+
+    public static Stream<Integer> primes(int n) {
+        return Stream.iterate(2, i -> i + 1)
+                .filter(TestJava8::isPrime)
+                .limit(n);
+    }
+    public static boolean isPrime(int candidate) {
+        int candidateRoot = (int) Math.sqrt((double) candidate);
+        return IntStream.rangeClosed(2, candidateRoot)
+                .noneMatch(i -> candidate % i == 0);
+    }
+
 }
