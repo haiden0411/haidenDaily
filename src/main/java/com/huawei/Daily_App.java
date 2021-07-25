@@ -25,7 +25,7 @@ import java.util.Locale;
 @ComponentScan(lazyInit = true)
 @ImportResource(value = {"classpath:spring_other.xml"})
 @PropertySource(value = {"classpath:config.properties"},ignoreResourceNotFound = true)
-public class Daily_App implements WebMvcConfigurer
+public class Daily_App
 {
     public static void main(String[] args)
     {

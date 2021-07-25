@@ -15,7 +15,7 @@ spring:
         min-idle: 1
     timeout: PT10S
     host: 192.168.1.120
-    port: 6380
+    port: 6379
 
   messages:
     encoding: utf-8
