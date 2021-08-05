@@ -234,7 +234,7 @@ public class JedisService
         String result;
         try {
             jedis=jedisPool.getResource();
-            result = jedis.set(key, value, nxxx, expx, time);
+            result = jedis.set(key, value);
         } finally {
             if(jedis!=null){
                 jedis.close();

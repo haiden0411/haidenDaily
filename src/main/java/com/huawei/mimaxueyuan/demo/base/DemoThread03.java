@@ -32,6 +32,14 @@ public class DemoThread03{
 	
 	//异步执行
 	public void print2() {
+		try
+		{
+			Thread.sleep(100000);
+		}
+		catch (InterruptedException e)
+		{
+			e.printStackTrace();
+		}
 		System.out.println(Thread.currentThread().getName()+">hello!");
 	}
 	
@@ -54,5 +62,6 @@ public class DemoThread03{
 		
 		t1.start();
 		t2.start();
+		System.out.println("aa");
 	}
 }
