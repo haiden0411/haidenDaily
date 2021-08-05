@@ -21,6 +21,7 @@ public class Java8Time
         System.out.println(date.getYear());
         System.out.println(date.getDayOfYear());
         Month month = date.getMonth();
+
         System.out.println(date.getDayOfMonth());
         System.out.println(date.lengthOfMonth());
         System.out.println(LocalDate.now());
