@@ -85,13 +85,18 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
 
-  <select id="selectAll" resultType="Product">
+  <select id="selectByIds" resultType="Product">
     SELECT <include refid="Base_Column_List"/>
     FROM product
     WHERE id in
     <foreach collection ="ids" item="item" index= "index" separator ="," open="(" close=")">
       #{item}
     </foreach >
+  </select>
+
+  <select id="findAll" resultType="Product">
+    SELECT <include refid="Base_Column_List"/>
+    FROM product
   </select>
 
   <!--批量插入-->

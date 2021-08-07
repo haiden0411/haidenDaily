@@ -1,11 +1,14 @@
 package com.huawei.springboot.service.impl;
 import cn.hutool.core.lang.Snowflake;
+import com.google.common.base.Stopwatch;
 import com.huawei.springboot.domain.Product;
 import com.huawei.springboot.mapper.ProductMapper;
 import com.huawei.springboot.service.IProductService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -17,6 +20,7 @@ import java.util.concurrent.*;
  * Description：<描述>
  */
 @Service
+@Slf4j
 public class ProductServiceImpl implements IProductService
 {
 
@@ -41,19 +45,27 @@ public class ProductServiceImpl implements IProductService
     @Override
     public List<Product> findProductByIds(List<Integer> ids)
     {
-        return mapper.selectAll(ids);
+        return mapper.selectByIds(ids);
     }
 
     @Override
-    public void batchInsert(int size) throws Exception
+    public void batchInsert(int times) throws Exception
     {
-
         List<ProductCallable> callables = new ArrayList<>();
-        for (int i = 0; i < size; i++)
+        for (int i = 0; i < times; i++)
         {
             callables.add(new ProductCallable(batchSize));
         }
         EXECUTOR.invokeAll(callables);
+    }
+
+    @Override
+    @Transactional
+    public List<Product> findAll() {
+        Stopwatch started = Stopwatch.createStarted();
+        List<Product> products = mapper.findAll();
+        log.info("product size:{},take times:{}ms",products.size(),started.elapsed(TimeUnit.MILLISECONDS));
+        return products;
     }
 
     class ProductCallable implements Callable<Boolean>
@@ -77,7 +89,10 @@ public class ProductServiceImpl implements IProductService
                 product.setUpdateTime(new Date());
                 products.add(product);
             }
+            Stopwatch started = Stopwatch.createStarted();
             mapper.insertBatch(products);
+            long elapsed = started.elapsed(TimeUnit.MILLISECONDS);
+            log.info(Thread.currentThread().getName()+" elapsed:{}ms",elapsed);
             return true;
         }
     }

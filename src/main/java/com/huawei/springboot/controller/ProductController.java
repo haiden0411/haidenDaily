@@ -1,6 +1,8 @@
 package com.huawei.springboot.controller;
+import com.google.common.base.Stopwatch;
 import com.huawei.springboot.domain.Product;
 import com.huawei.springboot.service.IProductService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -8,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 /**
@@ -17,6 +20,7 @@ import java.util.stream.Stream;
  */
 @RestController
 @RequestMapping("product")
+@Slf4j
 public class ProductController
 {
 
@@ -35,11 +39,21 @@ public class ProductController
         return productService.findProductByIds(ids);
     }
 
-    @RequestMapping("/batchInser/{size}")
-    public void batchInser(@PathVariable("size") int size) throws Exception
+    @RequestMapping("/batchInsert/{size}")
+    public String batchInser(@PathVariable("size") int size) throws Exception
     {
         productService.batchInsert(size);
+        return "success";
     }
+
+    @RequestMapping("/findAll")
+    public String findAll() throws Exception
+    {
+        List<Product> products = productService.findAll();
+        return "success";
+    }
+
+
 
 
 

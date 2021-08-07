@@ -13,5 +13,7 @@ public interface IProductService
 {
     Product findProductById(Integer id);
     List<Product> findProductByIds(List<Integer> ids);
-    void batchInsert(int size) throws InterruptedException, Exception;
+    void batchInsert(int times) throws Exception;
+    List<Product> findAll();
+
 }

@@ -31,5 +31,4 @@ public class Daily_App
     {
        SpringApplication.run(Daily_App.class, args);
     }
-
 }

@@ -20,7 +20,9 @@ public interface ProductMapper
 
     int updateByPrimaryKey(Product record);
 
-    List<Product> selectAll(@Param("ids") List<Integer> ids);
+    List<Product> selectByIds(@Param("ids") List<Integer> ids);
+
+    List<Product> findAll();
 
     void insertBatch(@Param("products") List<Product> products);
 }
