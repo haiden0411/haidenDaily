@@ -1,7 +1,5 @@
 package com.huawei;
-import com.google.common.base.Splitter;
 import com.huawei.Daliy.dataSource.MyDataSource;
-import com.huawei.Generic.FunctionWithException;
 import com.huawei.springboot.domain.*;
 
 import java.io.*;
@@ -14,10 +12,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.Instant;
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.*;
 
 import static java.util.Comparator.comparing;
@@ -27,7 +22,6 @@ import java.util.concurrent.*;
 import static java.util.Comparator.comparingInt;
 import static java.util.stream.Collectors.counting;
 
-import java.util.function.BiPredicate;
 import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -35,7 +29,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import com.huawei.utils.Java8Utils;
+import com.huawei.springboot.utils.Java8Utils;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -504,11 +498,9 @@ public class TestJava8
         assertEquals(add2Multi3.apply(1).intValue(),9);
     }
     @Test
-    public void testFunctionWithException()
+    public void testArrayToSteam()
     {
-
     }
-
     // 为lambda 表达式添加一个try/catch 代码块，或委托给某个提取的方法进行处理。
     public List<String> encodeValues(String... values) {
         return Arrays.stream(values)
@@ -526,12 +518,6 @@ public class TestJava8
            throw new RuntimeException();
         }
     }
-    private List<String> encodeValuesWithWrapper(String... values)
-    {
-        return Arrays.stream(values)
-                .map(wrapper(s->URLEncoder.encode(s,"UTF-8")))
-                .collect(toList());
-    }
     private void printCollection(Iterable<?> collect)
     {
         collect.forEach(System.out::println);
@@ -541,17 +527,5 @@ public class TestJava8
         Thread.sleep(2000);
         return new Double(250);
     }
-    private static<T,R,E extends Exception> Function<T,R> wrapper(FunctionWithException<T,R,E> fe)
-    {
-        return arg->{
-            try
-            {
-                return fe.apply(arg);
-            }
-            catch (Exception e)
-            {
-               throw new RuntimeException();
-            }
-        };
-    }
+
 }

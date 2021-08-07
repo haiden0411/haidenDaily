@@ -1,7 +1,4 @@
 package com.huawei.Daliy.sort;
-import com.huawei.utils.Java8Utils;
-
-import java.util.Arrays;
 import java.util.Random;
 /**
  * Author：胡灯

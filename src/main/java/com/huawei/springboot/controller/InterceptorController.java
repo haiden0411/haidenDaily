@@ -1,5 +1,5 @@
 package com.huawei.springboot.controller;
-import com.huawei.utils.JsonData;
+import com.huawei.springboot.utils.JsonData;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

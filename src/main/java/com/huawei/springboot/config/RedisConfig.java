@@ -1,6 +1,6 @@
 package com.huawei.springboot.config;
 import com.huawei.springboot.listener.KeyExpireLisener;
-import com.huawei.springboot.serializer.MyStringRedisSerializer;
+import com.huawei.springboot.utils.MyStringRedisSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;

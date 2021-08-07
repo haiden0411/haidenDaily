@@ -1,7 +1,6 @@
 package com.huawei.springboot.service.impl;
 import com.huawei.springboot.domain.SysUser;
 import com.huawei.springboot.domain.User;
-import com.huawei.springboot.domain.pojo.BussinessPerson;
 import com.huawei.springboot.domain.vo.LoginReqVo;
 import com.huawei.springboot.domain.vo.LoginRespVo;
 import com.huawei.springboot.domain.vo.RegisterReqVO;
@@ -10,7 +9,7 @@ import com.huawei.springboot.exception.BusinessException;
 import com.huawei.springboot.mapper.SysUserMapper;
 import com.huawei.springboot.service.RedisService;
 import com.huawei.springboot.service.UserService;
-import com.huawei.utils.PasswordUtils;
+import com.huawei.springboot.utils.PasswordUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;

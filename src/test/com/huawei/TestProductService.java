@@ -1,5 +1,5 @@
 package huawei;
-import com.huawei.javaBase.CompletableFuture.ProductService;
+import com.huawei.javaNewFeture.CompletableFuture.ProductService;
 import org.junit.Before;
 import org.junit.Test;
 

@@ -1,6 +1,6 @@
 package huawei;
-import com.huawei.javaBase.Adjusters;
-import com.huawei.javaBase.PaydayAdjuster;
+import com.huawei.javaNewFeture.Adjusters;
+import com.huawei.javaNewFeture.PaydayAdjuster;
 import org.junit.Test;
 
 import java.math.BigDecimal;
