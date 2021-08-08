@@ -33,5 +33,5 @@ spring:
 mybatis-plus:
   mapper-locations:  classpath:/mappers/*.xml
   type-aliases-package: com.huawei.springboot.domain
-#  configuration:
-#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

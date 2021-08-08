@@ -15,4 +15,5 @@ public interface IProductSnapshotService extends IService<ProductSnapshot>
 {
     void batchInsert(List<ProductSnapshot> snapshots) throws Exception;
     List<ProductSnapshot> assembleProductSnapshots(List<Product> products);
+    Integer saveSnapshot(ProductSnapshot snapshot);
 }
