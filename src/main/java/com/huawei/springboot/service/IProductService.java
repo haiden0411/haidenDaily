@@ -1,4 +1,5 @@
 package com.huawei.springboot.service;
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.huawei.springboot.domain.Product;
 import org.springframework.stereotype.Service;
 
@@ -9,7 +10,7 @@ import java.util.List;
  * Description：<描述>
  */
 
-public interface IProductService
+public interface IProductService  extends IService<Product>
 {
     Product findProductById(Integer id);
     List<Product> findProductByIds(List<Integer> ids);

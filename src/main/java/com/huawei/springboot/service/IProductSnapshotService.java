@@ -1,4 +1,5 @@
 package com.huawei.springboot.service;
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.huawei.springboot.domain.Product;
 import com.huawei.springboot.domain.ProductSnapshot;
 
@@ -10,7 +11,7 @@ import java.util.List;
  * Description：<描述>
  */
 
-public interface IProductSnapshotService
+public interface IProductSnapshotService extends IService<ProductSnapshot>
 {
     void batchInsert(List<ProductSnapshot> snapshots) throws Exception;
     List<ProductSnapshot> assembleProductSnapshots(List<Product> products);

@@ -1,5 +1,6 @@
 package com.huawei.springboot.service.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.huawei.springboot.domain.Product;
 import com.huawei.springboot.domain.ProductSnapshot;
 import com.huawei.springboot.mapper.ProductMapper;
@@ -12,7 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class ProductSnapshotService implements IProductSnapshotService {
+public class ProductSnapshotService extends ServiceImpl<ProductSnapshotMapper,ProductSnapshot> implements IProductSnapshotService {
     @Autowired
     private ProductMapper productMapper;
 

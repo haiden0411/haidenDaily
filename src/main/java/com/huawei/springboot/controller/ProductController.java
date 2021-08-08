@@ -23,7 +23,6 @@ import java.util.stream.Stream;
 @Slf4j
 public class ProductController
 {
-
     @Autowired
     private IProductService productService;
 
@@ -47,15 +46,10 @@ public class ProductController
     }
 
     @RequestMapping("/findAll")
-    public String findAll() throws Exception
+    public Integer findAll() throws Exception
     {
         List<Product> products = productService.findAll();
-        return "success";
+        return products.size();
     }
-
-
-
-
-
 
 }
