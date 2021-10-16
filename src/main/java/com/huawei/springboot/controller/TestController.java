@@ -1,6 +1,7 @@
 package com.huawei.springboot.controller;
 import com.huawei.springboot.domain.User;
 import com.huawei.springboot.exception.BizException;
+import com.huawei.springboot.service.TestRollbackService;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.NumberFormat;
 import org.springframework.http.HttpHeaders;
@@ -8,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import java.util.*;
 
 /**
@@ -19,6 +21,10 @@ import java.util.*;
 @RequestMapping("/user")
 public class TestController
 {
+
+    @Resource
+    private TestRollbackService testRollbackService;
+
     @GetMapping("/{id}")
     public String test01(@PathVariable("id") Long id){
         try
@@ -98,5 +104,13 @@ public class TestController
         userList.add(user2);
         return userList;
     }
+
+    @RequestMapping("/rollback")
+    public String testRollBack()
+    {
+        testRollbackService.test1();
+        return "success";
+    }
+
 
 }
