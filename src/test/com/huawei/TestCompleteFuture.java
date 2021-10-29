@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.CompletableFuture;
@@ -252,6 +253,7 @@ public class TestCompleteFuture
         {
             System.out.println(new Random());
         }
+        System.out.println(new Date());
     }
     private void delay(int n){
         try

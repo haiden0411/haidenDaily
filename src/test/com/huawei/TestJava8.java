@@ -1,4 +1,5 @@
-package com.huawei;
+package huawei;
+
 import com.huawei.Daliy.dataSource.MyDataSource;
 import com.huawei.springboot.domain.*;
 
@@ -23,6 +24,7 @@ import static java.util.Comparator.comparingInt;
 import static java.util.stream.Collectors.counting;
 
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -30,34 +32,39 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import com.huawei.springboot.utils.Java8Utils;
+import io.swagger.models.auth.In;
+import org.aspectj.weaver.ast.Var;
 import org.junit.Before;
 import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 import static java.util.stream.Collectors.*;
+
 /**
  * Author：胡灯
  * Date：2019-09-01 23:19
  * Description：<描述>
  */
-public class TestJava8
-{
+public class TestJava8 {
     private Logger logger = Logger.getLogger(this.getClass().getName());
     private List<String> lists = new ArrayList<>();
     private List<Apple> apples = new ArrayList<>();
     List<Dish> menu = new ArrayList<>();
     List<Transaction> transactions = new ArrayList<>();
-    private void print(Collection<?> collection)
-    {
+
+    Map<String, List<String>> dishTags = new HashMap<>();
+
+    private void print(Collection<?> collection) {
         collection.forEach(System.out::println);
     }
-    private void printSeparate()
-    {
+
+    private void printSeparate() {
         System.out.println("---------------------");
     }
+
     @Before
-    public void setup()
-    {
+    public void setup() {
         lists = Arrays.asList("aa", "bbb", "ccccc", "chinasoft", "begin", "shen", "haiden", "missxiaoasfafafafa", "c");
         apples = Arrays.asList(new Apple("gree", 20),
                 new Apple("red", 30), new Apple("back", 40),
@@ -83,10 +90,20 @@ public class TestJava8
                 new Transaction(mario, 2012, 700),
                 new Transaction(alan, 2012, 950)
         );
+        dishTags.put("pork", Arrays.asList("greasy", "salty"));
+        dishTags.put("beef", Arrays.asList("salty", "roasted"));
+        dishTags.put("chicken", Arrays.asList("fried", "crisp"));
+        dishTags.put("french fries", Arrays.asList("greasy", "fried"));
+        dishTags.put("rice", Arrays.asList("light", "natural"));
+        dishTags.put("season fruit", Arrays.asList("fresh", "natural"));
+        dishTags.put("pizza", Arrays.asList("tasty", "salty"));
+        dishTags.put("prawns", Arrays.asList("tasty", "roasted"));
+        dishTags.put("salmon", Arrays.asList("delicious", "fresh"));
+
     }
+
     @Test
-    public void test1()
-    {
+    public void test1() {
         Thread t = new Thread(() ->
         {
             System.out.println("aa");
@@ -97,9 +114,9 @@ public class TestJava8
         apples.sort(comparing(Apple::getWeight).reversed());
         apples.stream().forEach(System.out::println);
     }
+
     @Test
-    public void test02()
-    {
+    public void test02() {
         List<Dish> vegetarian = menu.stream().filter(Dish::isVegetarian).collect(toList());
         printCollection(vegetarian);
         List<Integer> numbers = Arrays.asList(1, 2, 2, 2, 4, 3, 4, 5, 6, 7, 20, 45);
@@ -111,9 +128,9 @@ public class TestJava8
         List<Dish> meateDish = menu.stream().filter(dish -> dish.getType() == Dish.Type.MEAT).limit(2).collect(toList());
         printCollection(meateDish);
     }
+
     @Test
-    public void testStreamMap()
-    {
+    public void testStreamMap() {
         List<String> dishNames = menu.stream().map(Dish::getName).collect(toList());
         List<String> words = Arrays.asList("Java 8", "Lambdas", "In", "Action");
         List<Integer> wordsNumber = words.stream().map(String::length).collect(toList());
@@ -130,9 +147,9 @@ public class TestJava8
         number1.stream().flatMap(i -> number2.stream().map(j -> new int[]{i, j})).collect(toList());
         menu.stream().filter(Dish::isVegetarian).findAny().ifPresent(System.out::println);
     }
+
     @Test
-    public void testReduce()
-    {
+    public void testReduce() {
         List<Integer> numbers = Arrays.asList(1, 2, 2, 2, 4, 3, 4, 5, 6, 7, 20, 45);
         List<Integer> numbers2 = Arrays.asList(1, 2, 2, 2);
         System.out.println(numbers.stream().reduce(0, (a, b) -> (a + b)));
@@ -142,9 +159,9 @@ public class TestJava8
         Optional<Integer> reduce = menu.stream().map(dish -> 1).reduce(Integer::sum);
         System.out.println(reduce.get());
     }
+
     @Test
-    public void testTrader()
-    {
+    public void testTrader() {
         //找出2011年的所有交易并按交易额排序（从低到高）
         List<Transaction> collect = transactions.stream().filter(t -> t.getYear() == 2011).sorted(comparing(Transaction::getValue)).collect(toList());
         print(collect);
@@ -177,9 +194,9 @@ public class TestJava8
         //2
         transactions.stream().min(comparing(Transaction::getValue));
     }
+
     @Test
-    public void testDataStream()
-    {
+    public void testDataStream() {
         int sum = menu.stream().mapToInt(Dish::getCalories).sum();
         OptionalInt max = menu.stream().mapToInt(Dish::getCalories).max();
         System.out.println(max.orElse(1));
@@ -197,9 +214,9 @@ public class TestJava8
                 mapToObj(b -> new double[]{a, b, (double) Math.sqrt(a * a + b * b)}).filter(t -> t[2] % 1 == 0));
         pythagoreanTriples.limit(5).forEach(t -> System.out.println(t[0] + "," + t[1] + "," + t[2]));
     }
+
     @Test
-    public void testCreatStream() throws IOException
-    {
+    public void testCreatStream() throws IOException {
         //由值创建流
         Stream<String> stream = Stream.of("Java", "in", "action");
         stream.map(String::toUpperCase).forEach(System.out::println);
@@ -213,12 +230,9 @@ public class TestJava8
         File testFile = new File("F:\\test\\IO\\newPom.txt");
         long uniqueWorlds = 0;
         Path path = Paths.get("F:\\test\\IO\\newPom.txt");
-        try (Stream<String> lines = Files.lines(path, Charset.defaultCharset()))
-        {
+        try (Stream<String> lines = Files.lines(path, Charset.defaultCharset())) {
             System.out.println(lines.flatMap(t -> Arrays.stream(t.split(""))).distinct().count());
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
         }
         //统计文件中使用次数最多的单词
         //由函数生成流：创建无限流
@@ -227,9 +241,9 @@ public class TestJava8
         printSeparate();
         Stream.iterate(new int[]{0, 1}, t -> new int[]{t[1], t[0] + t[1]}).limit(20).forEach(t -> System.out.println("(" + t[0] + "," + t[1] + ")"));
     }
+
     @Test
-    public void testCollector()
-    {
+    public void testCollector() {
         Comparator<Dish> caloryComparator = Comparator.comparingInt(Dish::getCalories);
         Optional<Dish> collect = menu.stream().collect(maxBy(caloryComparator));
         System.out.println(collect.get());
@@ -259,74 +273,64 @@ public class TestJava8
         menu.stream().collect(reducing("", Dish::getName, (s, s2) -> s + s2));
         menu.stream().map(Dish::getName).collect(reducing((s, s2) -> s + s2));
     }
+
     @Test
-    public void testGroup()
-    {
+    public void testGroup() {
         Map<Dish.Type, List<Dish>> collect = menu.stream().collect(groupingBy(Dish::getType));
         System.out.println(collect);
         final String SENTENCE =
                 " Nel mezzo del cammin di nostra vita " +
                         "mi ritrovai in una selva oscura" +
                         " ché la dritta via era smarrita ";
-        Stream<Character> characterStream = IntStream.rangeClosed(0, SENTENCE.length()-1).mapToObj(SENTENCE::charAt);
+        Stream<Character> characterStream = IntStream.rangeClosed(0, SENTENCE.length() - 1).mapToObj(SENTENCE::charAt);
         System.out.println(characterStream.collect(toList()));
     }
+
     @Test
-    public void testFuture()
-    {
+    public void testFuture() {
         ExecutorService exec = Executors.newCachedThreadPool();
-        Future<Double> submit = exec.submit(new Callable<Double>()
-        {
+        Future<Double> submit = exec.submit(new Callable<Double>() {
             @Override
-            public Double call() throws Exception
-            {
+            public Double call() throws Exception {
                 return doSomethingAction();
             }
         });
-        try
-        {
+        try {
             Double result = submit.get(1, TimeUnit.SECONDS);
             System.out.println(result);
-        }
-        catch (InterruptedException e)
-        {
+        } catch (InterruptedException e) {
             e.printStackTrace();
-        }
-        catch (ExecutionException e)
-        {
+        } catch (ExecutionException e) {
             e.printStackTrace();
-        }
-        catch (TimeoutException e)
-        {
+        } catch (TimeoutException e) {
             e.printStackTrace();
         }
     }
+
     @Test
-    public void testSort()
-    {
+    public void testSort() {
         List<String> collect = lists.stream().sorted(comparing(String::length)).collect(toList());
         collect.forEach(System.out::println);
     }
+
     @Test
-    public void testMaxMin()
-    {
+    public void testMaxMin() {
         Optional<Integer> max = menu.stream().min(comparingInt(Dish::getCalories)).map(dish -> dish.getCalories());
         System.out.println(max.get());
         lists.stream().collect(toCollection(HashSet::new));
     }
+
     @Test
-    public void testParll()
-    {
-        for (int i = 0; i < 1000; i++)
-        {
+    public void testParll() {
+        for (int i = 0; i < 1000; i++) {
             //List<Integer> lists = new ArrayList<>();
             List<Integer> lists = new CopyOnWriteArrayList<>();
             IntStream.range(0, 100).parallel().forEach(lists::add);
         }
     }
+
     @Test
-    public void testJoin()
-    {
+    public void testJoin() {
         List<String> lists = Arrays.asList("spring", "struts", "hibernate", "css", "html", "bat");
         String collect = lists.stream().collect(joining("||", "[", "]"));
         System.out.println(collect);
@@ -337,22 +341,19 @@ public class TestJava8
         IntSummaryStatistics collect3 = menu.stream().collect(summarizingInt(Dish::getCalories));
         System.out.println(collect3);
     }
+
     @Test
-    public void testTry()
-    {
+    public void testTry() {
         String path = "";
-        try (OutputStream ops = new FileOutputStream(path);)
-        {
+        try (OutputStream ops = new FileOutputStream(path);) {
             ops.write("aaa".getBytes("UTF-8"));
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
     @Test
-    public void testDatasourceInsert() throws SQLException
-    {
+    public void testDatasourceInsert() throws SQLException {
         MyDataSource dataSource = new MyDataSource();
         Connection conn = dataSource.getConnection();
         String sql1 = "insert into t_customer(address,gender,name,telephone) values (?,?,?,?)";
@@ -366,25 +367,24 @@ public class TestJava8
         ps.close();
         conn.close();
     }
+
     @Test
-    public void testDatasoruceQuery() throws SQLException
-    {
+    public void testDatasoruceQuery() throws SQLException {
         MyDataSource dataSource = new MyDataSource();
         Connection conn = dataSource.getConnection();
         String sql = "select * from t_customer";
         PreparedStatement ps = conn.prepareStatement(sql);
         ResultSet rs = ps.executeQuery();
-        while (rs.next())
-        {
+        while (rs.next()) {
             System.out.println(rs.getInt(1));
         }
         rs.close();
         ps.close();
         conn.close();
     }
+
     @Test
-    public void testCollector2()
-    {
+    public void testCollector2() {
         System.out.println("-----------sort");
         List<Dish> collect = menu.stream().sorted(comparing(Dish::getCalories).reversed()).collect(toList());
         printCollection(collect);
@@ -398,9 +398,9 @@ public class TestJava8
         Integer sum2 = menu.stream().map(Dish::getCalories).reduce(0, Integer::sum);
         System.out.println(sum2);
     }
+
     @Test
-    public void testFlat()
-    {
+    public void testFlat() {
         String[] arrayOfWords = {"Goodbye", "World"};
         Stream<String> words = Arrays.stream(arrayOfWords);
         List<String> collect = words.map(s -> s.split(" ")).flatMap(Arrays::stream).distinct().collect(toList());
@@ -414,32 +414,32 @@ public class TestJava8
         List<double[]> collect2 = IntStream.rangeClosed(1, 100)
                 .boxed()
                 .flatMap(a -> IntStream.rangeClosed(a, 100)
-                       .mapToObj(b -> new double[]{a, b, Math.sqrt(a*a+b*b)})
-                       .filter(t -> t[2] % 1 == 0)).collect(toList());
+                        .mapToObj(b -> new double[]{a, b, Math.sqrt(a * a + b * b)})
+                        .filter(t -> t[2] % 1 == 0)).collect(toList());
         collect2.forEach(ints -> System.out.println(ints[0] + "-" + ints[1] + "-" + ints[2]));
     }
+
     @Test
-    public void testGetPropery()
-    {
+    public void testGetPropery() {
         List<String> aa = Java8Utils.getConfigList("sffaf");
         aa.forEach(System.out::println);
     }
+
     @Test
-    public void testMillToLocalDate()
-    {
+    public void testMillToLocalDate() {
         System.out.println(Java8Utils.mill2LocalDate(new Date().getTime()));
         System.out.println(Java8Utils.LocalDate2Date(LocalDate.now()));
     }
+
     @Test
-    public void testToMap()
-    {
-        List<String> lists = Arrays.asList("spring", "struts", "hibernate", "css", "html", "bat","spring","spring");
+    public void testToMap() {
+        List<String> lists = Arrays.asList("spring", "struts", "hibernate", "css", "html", "bat", "spring", "spring");
         Map<String, Integer> collect = lists.stream().collect(toMap(Function.identity(), s -> 1, (integer, integer2) -> ++integer));
-        assertEquals(collect.get("spring"),Integer.valueOf(3));
+        assertEquals(collect.get("spring"), Integer.valueOf(3));
     }
 
-//    @Test
-    public void testCollect(){
+    //    @Test
+    public void testCollect() {
         Map<Dish.Type, Dish> collect = menu.stream().collect(groupingBy(Dish::getType, collectingAndThen(maxBy(comparingInt(Dish::getCalories)), Optional::get)));
         System.out.println(collect);
         System.out.println(menu.stream().collect(counting()));
@@ -448,9 +448,9 @@ public class TestJava8
         menu.stream().collect(reducing(0, Dish::getCalories, Integer::sum));
         menu.stream().collect(collectingAndThen(toList(), List::size));
     }
+
     @Test
-    public void testRemoveIF()
-    {
+    public void testRemoveIF() {
         List<Integer> nums = new ArrayList<>();
         nums.add(-3);
         nums.add(1);
@@ -462,70 +462,124 @@ public class TestJava8
         System.out.println("Elements were " + (removed ? "" : "NOT") + " removed");
         nums.forEach(System.out::println);
     }
+
     @Test
-    public void testMapForEach()
-    {
+    public void testMapForEach() {
         Map<Long, String> map = new HashMap<>();
         map.put(86L, "Don Adams (Maxwell Smart)");
         map.put(99L, "Barbara Feldon");
         map.put(13L, "David Ketchum");
-        map.forEach((aLong, s) -> System.out.printf("agent %d,played by %s%n",aLong,s));
+        map.forEach((aLong, s) -> System.out.printf("agent %d,played by %s%n", aLong, s));
     }
+
     @Test
-    public void testLogSupplier()
-    {
+    public void testLogSupplier() {
         User user = new User();
         user.setId(1);
         user.setAge(20);
         user.setName("haiden");
         logger.setLevel(Level.WARNING);
         //会执行user.toString方法
-        logger.info("aa1:"+user.toString());
+        logger.info("aa1:" + user.toString());
         //不会执行user.toString方法
-        logger.info(() -> "aa:"+user.toString());
+        logger.info(() -> "aa:" + user.toString());
 
     }
-    
+
     @Test
-    public void testComposeAndThen(){
+    public void testComposeAndThen() {
         Function<Integer, Integer> add2 = x -> x + 2;
         Function<Integer, Integer> mult3 = x -> x * 3;
         Function<Integer, Integer> multi3add2 = add2.compose(mult3);
         Function<Integer, Integer> add2Multi3 = add2.andThen(mult3);
         System.out.println("multi3add2.apply(1) = " + multi3add2.apply(1));
         System.out.println("add2Muti3.apply(1) = " + add2Multi3.apply(1));
-        assertEquals(multi3add2.apply(1).intValue(),5);
-        assertEquals(add2Multi3.apply(1).intValue(),9);
+        assertEquals(multi3add2.apply(1).intValue(), 5);
+        assertEquals(add2Multi3.apply(1).intValue(), 9);
     }
+
     @Test
-    public void testArrayToSteam()
-    {
+    public void testArrayToSteam() {
+        List<Integer> num1 = Arrays.asList(1, 2, 3);
+        List<Integer> num2 = Arrays.asList(3, 4);
+        // 生成数对
+        List<int[]> collect = num1.stream()
+                .flatMap(a -> num2
+                        .stream()
+                        .filter(b -> (a + b) % 3 == 0)
+                        .map(b -> new int[]{a, b}))
+                .collect(toList());
+        collect.forEach(ints -> System.out.println(ints[0] + "," + ints[1]));
+
+        Map<Dish.Type, List<Dish>> caloricDishesByType =
+                menu.stream().filter(dish -> dish.getCalories() > 500)
+                        .collect(groupingBy(Dish::getType));
+        System.out.println(caloricDishesByType);
+
     }
+
+    @Test
+    public void testPredicate() {
+        Map<String, List<String>> map = new HashMap<>();
+        map.computeIfAbsent("aa", s -> new ArrayList<>()).add("bb");
+        map.computeIfPresent("aa", (s, strings) -> new ArrayList<>()).add("bb");
+        map.computeIfAbsent("aa", s -> new ArrayList<>()).add("bb");
+        map.computeIfAbsent("aa", s -> new ArrayList<>()).add("bb");
+        map.get("aa").forEach(System.out::println);
+        Predicate<Integer> p1 = integer -> integer > 2;
+        Predicate<Integer> p2 = integer -> integer % 2 == 0;
+        Predicate<Integer> p3 = integer -> integer < 5;
+        List<Integer> collect = Arrays.asList(1, 2, 3, 4, 5, 6, 7)
+                .stream()
+                .filter(p1.and(p2).and(p3))
+                .collect(toList());
+
+        collect.forEach(System.out::println);
+    }
+
+    @Test
+    public void testGroupBy() {
+        Map<Dish.Type, List<Dish>> dishTypes = menu.stream().collect(groupingBy(Dish::getType));
+        System.out.println(dishTypes);
+        printSeparate();
+
+        Map<Dish.Type, List<Dish>> filterMap = menu.stream()
+                .collect(groupingBy(Dish::getType, filtering(dish -> dish.getCalories() > 500, toList())));
+        System.out.println(filterMap);
+        printSeparate();
+
+        Map<Dish.Type, List<String>> collect = menu.stream()
+                .collect(groupingBy(Dish::getType, mapping(Dish::getName, toList())));
+        System.out.println(collect);
+        printSeparate();
+        Map<Dish.Type, Set<String>> collect1 = menu.stream()
+                .collect(groupingBy(Dish::getType, flatMapping(dish -> dishTags.getOrDefault(dish.getName(),new ArrayList<>()).stream(), toSet())));
+        System.out.println(collect1);
+        printSeparate();
+    }
+
     // 为lambda 表达式添加一个try/catch 代码块，或委托给某个提取的方法进行处理。
     public List<String> encodeValues(String... values) {
         return Arrays.stream(values)
                 .map(this::encodeString).collect(Collectors.toList());
     }
 
-    private String encodeString(String s)
-    {
-        try
-        {
+    private String encodeString(String s) {
+        try {
             return URLEncoder.encode(s, "UTF-8");
-        }
-        catch (UnsupportedEncodingException e)
-        {
-           throw new RuntimeException();
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException();
         }
     }
-    private void printCollection(Iterable<?> collect)
-    {
+
+    private void printCollection(Iterable<?> collect) {
         collect.forEach(System.out::println);
     }
-    private Double doSomethingAction() throws InterruptedException
-    {
+
+    private Double doSomethingAction() throws InterruptedException {
         Thread.sleep(2000);
         return new Double(250);
     }
+
 
 }
