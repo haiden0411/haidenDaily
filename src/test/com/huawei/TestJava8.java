@@ -4,6 +4,8 @@ import com.huawei.Daliy.dataSource.MyDataSource;
 import com.huawei.springboot.domain.*;
 
 import java.io.*;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -33,6 +35,7 @@ import java.util.stream.Stream;
 
 import com.huawei.springboot.utils.Java8Utils;
 import io.swagger.models.auth.In;
+import org.apache.commons.lang3.StringUtils;
 import org.aspectj.weaver.ast.Var;
 import org.junit.Before;
 import org.junit.Test;
@@ -556,6 +559,46 @@ public class TestJava8 {
                 .collect(groupingBy(Dish::getType, flatMapping(dish -> dishTags.getOrDefault(dish.getName(),new ArrayList<>()).stream(), toSet())));
         System.out.println(collect1);
         printSeparate();
+    }
+
+    @Test
+    public void test2021_10_30(){
+        // java攻略
+        List<BigDecimal> collect = Stream
+                .iterate(BigDecimal.ZERO, n -> n.add(BigDecimal.ONE)).limit(10)
+                .collect(toList());
+        System.out.println(collect);
+
+        List<String> strings = Arrays.asList("this", "is", "a", "list", "of", "strings");
+        List<String> collect1 = strings.stream().sorted(comparingInt(String::length)).collect(toList());
+        // reduce检查顺序
+        collect1.stream().reduce((prev, curr) ->{
+            assertTrue(prev.length()<=curr.length());
+            return curr;
+        });
+        // 利用缓存计算斐波那契
+        fib(10);
+        // map中的merge用法
+        Map<String, Integer> wordCount = new HashMap<>();
+        String passage = "this is a book,i like it,hehe,is good";
+        String testString = passage.toLowerCase(Locale.ROOT).replaceAll("\\W", StringUtils.SPACE);
+        System.out.println(testString);
+        Arrays.stream(testString.split("\\s+")).forEach(word ->wordCount.merge(word,1,Integer::sum) );
+        System.out.println(wordCount);
+    }
+    private BigInteger fib(long i)
+    {
+        Map<Long, BigInteger> cache = new HashMap<>();
+        if (i==0)
+        {
+            return BigInteger.ZERO;
+        }
+        if (i==1)
+        {
+            return BigInteger.ONE;
+        }
+
+        return cache.computeIfAbsent(i,n -> fib(n-2).add(fib(n-1)));
     }
 
     // 为lambda 表达式添加一个try/catch 代码块，或委托给某个提取的方法进行处理。
