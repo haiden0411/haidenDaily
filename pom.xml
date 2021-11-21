@@ -188,8 +188,11 @@
             <artifactId>jmh-generator-annprocess</artifactId>
             <version>1.17.4</version>
         </dependency>
-
-
+        <dependency>
+            <groupId>io.etcd</groupId>
+            <artifactId>jetcd-core</artifactId>
+            <version>0.5.0</version>
+        </dependency>
 
 
     </dependencies>
