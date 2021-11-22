@@ -96,7 +96,7 @@ public class AdvancedEtcdServiceImpl implements AdvancedEtcdService
         AtomicInteger a;
         Lease leaseClient = getClient().getLeaseClient();
 
-        leaseClient.grant(60)
+        leaseClient.grant(10)
                 .thenAccept(result -> {
 
                     // 租约ID

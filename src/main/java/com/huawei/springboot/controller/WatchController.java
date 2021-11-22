@@ -6,8 +6,10 @@ package com.huawei.springboot.controller;
  */
 import com.huawei.springboot.service.AdvancedEtcdService;
 import com.huawei.springboot.service.EtcdService;
+import com.huawei.springboot.service.impl.EtcdServiceImpl;
 import io.etcd.jetcd.KeyValue;
 import io.etcd.jetcd.Watch;
+import io.etcd.jetcd.kv.GetResponse;
 import io.etcd.jetcd.options.GetOption;
 import io.etcd.jetcd.watch.WatchEvent;
 import lombok.extern.slf4j.Slf4j;
@@ -18,9 +20,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 /**
@@ -98,4 +103,22 @@ public class WatchController
         return "success";
     }
 
+    @RequestMapping(value = "/del/{key}", method = RequestMethod.GET)
+    public String deleteKey(@PathVariable("key") String key) throws Exception
+    {
+        etcdService.deleteSingle(key);
+        return "success";
+    }
+
+    @RequestMapping(value = "/getByPrefix/{prefix}", method = RequestMethod.GET)
+    public Map<String,String> getByPrefix(@PathVariable("prefix") String prefix) throws Exception
+
+    {
+        GetOption getOption = GetOption.newBuilder().withPrefix(EtcdServiceImpl.bytesOf(prefix)).build();
+        GetResponse getResponse = etcdService.getRange(prefix, getOption);
+        Map<String, String> collect = getResponse.getKvs()
+                .stream()
+                .collect(Collectors.toMap(keyValue -> keyValue.getKey().toString(UTF_8), keyValue -> keyValue.getValue().toString(UTF_8)));
+        return collect;
+    }
 }

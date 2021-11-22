@@ -70,7 +70,12 @@ public class EtcdServiceImpl implements EtcdService
     @Override
     public String getSingle(String key) throws Exception {
         GetResponse getResponse = getKVClient().get(bytesOf(key)).get();
-
+        getResponse.getKvs().forEach(keyValue -> {
+            System.out.println("getCreateRevision:"+keyValue.getCreateRevision());
+            System.out.println("getModRevision:"+keyValue.getModRevision());
+            System.out.println("getLease:"+keyValue.getLease());
+            System.out.println("getVersion:"+keyValue.getVersion());
+        });
         return getResponse.getCount()>0 ?
                 getResponse.getKvs().get(0).getValue().toString(UTF_8) :
                 null;
