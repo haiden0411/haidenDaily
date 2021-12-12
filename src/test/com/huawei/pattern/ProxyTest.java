@@ -1,4 +1,4 @@
-package com.huawei.proxy;
+package com.huawei.pattern;
 import com.huawei.pattern.proxy.*;
 import org.aspectj.weaver.ast.Or;
 import org.junit.Test;
