@@ -1,4 +1,4 @@
-package com.huawei;
+package com.huawei.daily;
 import com.huawei.Daliy.sort.Sort;
 import org.junit.Before;
 import org.junit.Test;

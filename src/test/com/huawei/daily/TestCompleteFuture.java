@@ -1,4 +1,4 @@
-package com.huawei;
+package com.huawei.daily;
 import org.junit.Test;
 
 import java.math.BigDecimal;
@@ -8,10 +8,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
+import java.util.concurrent.*;
 import java.util.function.BiFunction;
 import java.util.function.BinaryOperator;
 import java.util.stream.Collectors;
@@ -47,32 +44,22 @@ public class TestCompleteFuture
         {
             result = CompletableFuture.completedFuture("hi").get();
         }
-        catch (InterruptedException e)
-        {
+        catch (Exception e){
             e.printStackTrace();
         }
-        catch (ExecutionException e)
-        {
-            e.printStackTrace();
-        }
+
         System.out.println(result);
 
         try
         {
             String hi = CompletableFuture.completedFuture("hi").get(10, TimeUnit.SECONDS);
+            System.out.println(hi);
         }
-        catch (InterruptedException e)
+        catch (Exception e)
         {
             e.printStackTrace();
         }
-        catch (ExecutionException e)
-        {
-            e.printStackTrace();
-        }
-        catch (TimeoutException e)
-        {
-            e.printStackTrace();
-        }
+
     }
     //设置任务执行过程抛出异常时，返回的默认值
     @Test
@@ -119,7 +106,7 @@ public class TestCompleteFuture
         CompletableFuture<Integer> task2 = CompletableFuture.supplyAsync(() -> {
             return Integer.parseInt("2");
         });
-        //Thread.sleep(1000);
+        Thread.sleep(1000);
         boolean setIsSuccess2 = task2.completeExceptionally(new RuntimeException("Manual Except End"));
         System.out.println(setIsSuccess2);
 
@@ -132,8 +119,9 @@ public class TestCompleteFuture
             }
         });
         //task3.join();
-        /*boolean cancelSuccess = task3.cancel(true);
-        System.out.println("cancelSuccess:" + cancelSuccess);*/
+       // task3.completeExceptionally(new RuntimeException("aa"));
+        boolean cancelSuccess = task3.cancel(true);
+        System.out.println("cancelSuccess:" + cancelSuccess);
     }
 
     @Test
@@ -232,7 +220,7 @@ public class TestCompleteFuture
         //CompletableFuture.allOf(a1,a2,a3).join();
         //CompletableFuture.anyOf(futures.toArray(new CompletableFuture[futures.size()])).join();
         //futures.stream().map(CompletableFuture::join).forEach(unused -> {});
-        List<String> strings = Arrays.asList("a1", "a2", "a3", "a4");
+        List<String> strings = Arrays.asList("a1", "a2", "a3", "a4","a5","a6","a7","a8");
         List<CompletableFuture<Void>> collect = strings.stream()
                 .map(s -> getVoidCompletableFuture(3, s))
                 .collect(Collectors.toList());

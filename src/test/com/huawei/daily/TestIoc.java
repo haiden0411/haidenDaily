@@ -1,4 +1,4 @@
-package huawei;
+package com.huawei.daily;
 import com.huawei.Daily_App;
 import com.huawei.springboot.config.ParamsBean;
 import com.huawei.springboot.domain.pojo.BussinessPerson;

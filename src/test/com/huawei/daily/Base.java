@@ -1,6 +1,4 @@
-package huawei;
-import io.swagger.models.auth.In;
-
+package com.huawei.daily;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;

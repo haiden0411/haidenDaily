@@ -1,4 +1,4 @@
-package huawei;
+package com.huawei.daily;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;

@@ -1,4 +1,4 @@
-package huawei;
+package com.huawei.daily;
 import org.junit.Test;
 
 import java.lang.ref.SoftReference;

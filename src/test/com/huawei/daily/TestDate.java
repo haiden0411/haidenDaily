@@ -1,4 +1,4 @@
-package huawei;
+package com.huawei.daily;
 import com.huawei.javaNewFeture.Adjusters;
 import com.huawei.javaNewFeture.PaydayAdjuster;
 import org.junit.Test;

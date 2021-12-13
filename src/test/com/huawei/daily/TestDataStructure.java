@@ -1,4 +1,4 @@
-package huawei;
+package com.huawei.daily;
 import com.google.common.collect.Lists;
 import org.junit.Test;
 

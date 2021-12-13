@@ -1,4 +1,4 @@
-package com.huawei;
+package com.huawei.daily;
 import com.huawei.springboot.domain.User;
 import org.junit.Test;
 import org.springframework.http.HttpEntity;

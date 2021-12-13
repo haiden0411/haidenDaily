@@ -1,4 +1,4 @@
-package huawei;
+package com.huawei.daily;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.RemovalListener;

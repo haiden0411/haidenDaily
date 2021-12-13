@@ -1,4 +1,4 @@
-package com.huawei;
+package com.huawei.daily;
 
 import com.alibaba.fastjson.JSON;
 import com.google.common.base.*;

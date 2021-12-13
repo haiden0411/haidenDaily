@@ -1,4 +1,4 @@
-package com.huawei;
+package com.huawei.daily;
 import com.huawei.springboot.domain.Apple;
 import org.junit.Test;
 

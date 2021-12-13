@@ -1,3 +1,4 @@
+package com.huawei.daily;
 import com.huawei.Daily_App;
 import com.huawei.springboot.service.JedisService;
 import com.huawei.springboot.service.RedisService;

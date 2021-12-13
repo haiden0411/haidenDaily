@@ -1,4 +1,4 @@
-package huawei;
+package com.huawei.daily;
 import com.huawei.javaNewFeture.CompletableFuture.ProductService;
 import org.junit.Before;
 import org.junit.Test;

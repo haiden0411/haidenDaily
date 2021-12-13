@@ -1,4 +1,4 @@
-package huawei;
+package com.huawei.daily;
 
 import com.huawei.Daliy.dataSource.MyDataSource;
 import com.huawei.springboot.domain.*;
