@@ -36,6 +36,10 @@ public class A
     {
         System.out.println("This is func3：" + s + m);
     }
+    private void func4(String s, String m)
+    {
+        System.out.println("This is func4:"+s+m);
+    }
     public static void main(String[] args) throws Exception
     {
         Class classInfo = Class.forName("com.huawei.reflect.A");
